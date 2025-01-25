@@ -36,9 +36,11 @@ vim.keymap.set('n', 'ö', ':bprevious<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', 'ä', ':bnext<CR>', { noremap = true, silent = true })
 
 -- Execute or source current file
-vim.keymap.set('n', '<space><space>x', '<cmd>source %<CR>')
+vim.keymap.set('n', '<space>x', '<cmd>source %<CR>')
 -- Execute Plenary tests
 vim.keymap.set('n', '<space>tf', '<cmd>PlenaryBustedFile %<CR>')
+-- Oil open a parent directory
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -95,6 +97,12 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Disable diagnostics for Markdown files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'markdown',
+  callback = function() end,
+})
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -117,6 +125,22 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- zk keymaps
+local zkOpts = { noremap = true, silent = false }
+
+-- Create a new note after asking for its title.
+vim.api.nvim_set_keymap('n', '<leader>zn', "<Cmd>ZkNew { title = vim.fn.input('Title: ') }<CR>", zkOpts)
+
+-- Open notes.
+vim.api.nvim_set_keymap('n', '<leader>zo', "<Cmd>ZkNotes { sort = { 'modified' } }<CR>", zkOpts)
+-- Open notes associated with the selected tags.
+vim.api.nvim_set_keymap('n', '<leader>zt', '<Cmd>ZkTags<CR>', zkOpts)
+
+-- Search for the notes matching a given query.
+vim.api.nvim_set_keymap('n', '<leader>zf', "<Cmd>ZkNotes { sort = { 'modified' }, match = { vim.fn.input('Search: ') } }<CR>", zkOpts)
+-- Search for the notes matching the current visual selection.
+vim.api.nvim_set_keymap('v', '<leader>zf', ":'<,'>ZkMatch<CR>", zkOpts)
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -780,6 +804,7 @@ require('lazy').setup({
           { name = 'luasnip' },
           { name = 'path' },
           { name = 'codecompanion' },
+          { name = 'supermaven' },
         },
       }
     end,
