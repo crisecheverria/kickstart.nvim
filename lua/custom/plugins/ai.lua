@@ -6,6 +6,9 @@ return {
     end,
   },
   {
+    'github/copilot.vim',
+  },
+  {
     'olimorris/codecompanion.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',
