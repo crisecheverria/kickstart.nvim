@@ -165,12 +165,21 @@ vim.api.nvim_create_autocmd('TermOpen', {
   end,
 })
 
+-- Keymap to open a terminal
 vim.keymap.set('n', '<leader>st', function()
   vim.cmd.vnew()
   vim.cmd.term()
   vim.cmd.wincmd 'J'
   vim.api.nvim_win_set_height(0, 15)
 end, { desc = '[S]tart [T]erminal' })
+
+-- Example of runing custom commands into terminal.
+-- Could be used for npm build, npm start, etc.
+
+vim.keymap.set('n', '<leader>nb', function()
+  vim.cmd.vnew()
+  vim.cmd 'term npm run build'
+end, { desc = '[N]pm [B]uild' })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
