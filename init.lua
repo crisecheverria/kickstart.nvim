@@ -566,6 +566,14 @@ require('lazy').setup({
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
           end
+
+          -- Disable LSP warnings for markdown files
+          vim.api.nvim_create_autocmd('FileType', {
+            pattern = 'markdown',
+            callback = function()
+              vim.diagnostic.enable(false) -- Disable LSP warnings for markdown
+            end,
+          })
         end,
       })
 
